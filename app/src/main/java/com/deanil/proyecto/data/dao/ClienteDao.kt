@@ -12,7 +12,7 @@ import com.deanil.proyecto.data.entities.ClienteEntity
 interface ClienteDao {
 
     @Query("SELECT * FROM clientes")
-    fun getAllClientes(): List<ClienteEntity>
+    fun getAllClientes(): MutableList<ClienteEntity>
 
     @Query("SELECT * FROM clientes WHERE id_cliente = :id")
     fun getClienteById(id: Int): ClienteEntity
@@ -28,5 +28,8 @@ interface ClienteDao {
 
     @Delete
     fun deleteCliente(cliente: ClienteEntity)
+
+    @Query("SELECT * FROM clientes WHERE nombre = :nombre LIMIT 1")
+    fun getClienteByNombre(nombre: String): ClienteEntity?
 
 }

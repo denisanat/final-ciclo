@@ -24,12 +24,6 @@ data class FacturaEntity(
     @ColumnInfo(name = "metodo_de_pago")
     val metodoDePago: MetodosDePago,
 
-    @ColumnInfo(name = "descuento_aplicado")
-    val descuentoAplicado: Float,
-
-    @ColumnInfo(name = "cantidad_producto")
-    val cantidadProducto: Float,
-
     @ColumnInfo(name = "importe_total")
     val importeTotal: Float,
 
@@ -41,10 +35,6 @@ data class FacturaEntity(
 
     @ColumnInfo(name = "cliente_id")
     val idCliente: Int,
-
-    @ColumnInfo(name = "codigo_producto")
-    val codigoProducto: Int,
-
 ) {
     enum class MetodosDePago(
         val texto: String

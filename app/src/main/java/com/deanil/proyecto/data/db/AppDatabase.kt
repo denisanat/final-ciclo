@@ -1,8 +1,13 @@
 package com.deanil.proyecto.data.db
 
+import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.deanil.proyecto.data.dao.AlbaranDao
 import com.deanil.proyecto.data.dao.ClienteDao
 import com.deanil.proyecto.data.dao.FacturaDao
@@ -19,7 +24,7 @@ import com.deanil.proyecto.data.entities.ProductoEntity
         FacturaEntity::class,
         AlbaranEntity::class
                ],
-    version = 1)
+    version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun clienteDao(): ClienteDao

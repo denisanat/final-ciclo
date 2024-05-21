@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_back"
+        android:icon="@drawable/ic_back_24dp"
+        android:title="Back"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_home_24dp"
+        android:title="Home"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="Share"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_agree"
+        android:icon="@drawable/ic_check_24dp"
+        android:title="Agree"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_24dp"
+        android:title="Settings"
+        app:showAsAction="always"/>
+
+</menu>

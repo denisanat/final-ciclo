@@ -41,12 +41,17 @@ android {
 
 dependencies {
 
+    //Room
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    val coroutines_version = "1.7.1"
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

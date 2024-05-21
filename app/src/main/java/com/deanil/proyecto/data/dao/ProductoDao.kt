@@ -11,10 +11,13 @@ import com.deanil.proyecto.data.entities.ProductoEntity
 interface ProductoDao {
 
     @Query("SELECT * FROM productos")
-    fun getAllProductos(): List<ProductoEntity>
+    fun getAllProductos(): MutableList<ProductoEntity>
 
     @Query("SELECT * FROM productos WHERE codigo = :codigo")
     fun getProductoById(codigo: Int): ProductoEntity
+
+    @Query("SELECT * FROM productos WHERE nombre = :nombre LIMIT 1")
+    fun getProductoByNombre(nombre: String): ProductoEntity
 
     @Insert
     fun insertAll(productos: List<ProductoEntity>)

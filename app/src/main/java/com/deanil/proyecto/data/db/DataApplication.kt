@@ -1,8 +1,7 @@
-package com.deanil.proyecto.data
+package com.deanil.proyecto.data.db
 
 import android.app.Application
 import androidx.room.Room
-import com.deanil.proyecto.data.db.AppDatabase
 
 class DataApplication : Application() {
     companion object {

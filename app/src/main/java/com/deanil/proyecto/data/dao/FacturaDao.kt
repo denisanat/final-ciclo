@@ -13,7 +13,7 @@ import com.deanil.proyecto.data.entities.Linea
 interface FacturaDao {
 
     @Query("SELECT * FROM facturas")
-    fun getAllFacturas(): List<FacturaEntity>
+    fun getAllFacturas(): MutableList<FacturaEntity>
 
     @Query("SELECT * FROM facturas WHERE numero_factura = :numero")
     fun getFactura(numero: Int): FacturaEntity
@@ -29,4 +29,7 @@ interface FacturaDao {
 
     @Delete
     fun deleteFactura(factura: FacturaEntity)
+
+    @Query("SELECT * FROM facturas WHERE cliente_id = :cliente")
+    fun getFacturasByCliente(cliente: Int): List<FacturaEntity>
 }
