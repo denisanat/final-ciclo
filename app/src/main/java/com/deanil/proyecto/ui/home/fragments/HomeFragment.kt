@@ -28,23 +28,39 @@ class HomeFragment : Fragment() {
         setVisibilityAppBarButtons()
 
         val fragmentManager = requireActivity().supportFragmentManager
-        binding.botonCliente.setOnClickListener {
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, ClientesFragment())
-                .addToBackStack(null)
-                .commit()
+        binding.btnClientes.apply {
+            setButtonIcon(R.drawable.clientes)
+            setButtonText("Clientes")
+            setOnClickListener {
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, ClientesFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
-        binding.btnProductos.setOnClickListener {
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, ProductosFragment())
-                .addToBackStack(null)
-                .commit()
+        binding.btnProductos.apply {
+            setButtonIcon(R.drawable.productos)
+            setButtonText("Productos")
+            setOnClickListener {
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, ProductosFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
-        binding.btnFacturas.setOnClickListener {
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, FacturasFragment())
-                .addToBackStack(null)
-                .commit()
+        binding.btnFacturas.apply {
+            setButtonIcon(R.drawable.facturas)
+            setButtonText("Facturas")
+            setOnClickListener {
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, FacturasFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+        binding.btnAlbaranes.apply {
+            setButtonIcon(R.drawable.albaran)
+            setButtonText("Albaranes")
         }
 
         return binding.root

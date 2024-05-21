@@ -297,6 +297,13 @@ class NewFacturaFragment : Fragment() {
     private fun stringToDate(fecha: String): Date {
         val fechaSeparada = fecha.split("/")
         return Date(fechaSeparada.get(0).toInt(), fechaSeparada.get(1).toInt(), fechaSeparada.get(2).toInt())
+        //val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        //    return try {
+        //        format.parse(dateString)
+        //    } catch (e: ParseException) {
+        //        // Manejar el error apropiadamente
+        //        null
+        //    }
     }
 
 }
