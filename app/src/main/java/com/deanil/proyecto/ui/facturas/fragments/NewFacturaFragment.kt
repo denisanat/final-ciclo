@@ -58,6 +58,9 @@ class NewFacturaFragment : Fragment() {
     private var importeIva = 0f
     private var importeTotalPagar = 0f
 
+    private var isFecha = false
+    private var isFecha2 = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -250,7 +253,8 @@ class NewFacturaFragment : Fragment() {
     }
 
     fun onDateSelected(day: Int, month: Int, year: Int) {
-        binding.btnFechaEmision.setText("$day/$month/$year")
+        binding.btnFechaEmision.setText("$day/${month+1}/$year")
+        isFecha = true
     }
 
     private fun showDatePickerDialog2() {
@@ -259,7 +263,8 @@ class NewFacturaFragment : Fragment() {
     }
 
     fun onDateSelected2(day: Int, month: Int, year: Int) {
-        binding.btnFechaVencimiento.setText("$day/$month/$year")
+        binding.btnFechaVencimiento.setText("$day/${month+1}/$year")
+        isFecha2 = true
     }
 
     private fun setupAppbar() {
@@ -276,7 +281,7 @@ class NewFacturaFragment : Fragment() {
     }
 
     private fun crearFactura() {
-        if (cliente != null) {
+        if (validarFactura()) {
             val factura = FacturaEntity(
                 numeroFactura = binding.campoNumeroFactura.text.toString(),
                 estado = FacturaEntity.Estados.NOPAGADA,
@@ -299,13 +304,26 @@ class NewFacturaFragment : Fragment() {
     private fun stringToDate(fecha: String): Date {
         val fechaSeparada = fecha.split("/")
         return Date(fechaSeparada.get(0).toInt(), fechaSeparada.get(1).toInt(), fechaSeparada.get(2).toInt())
-        //val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        //    return try {
-        //        format.parse(dateString)
-        //    } catch (e: ParseException) {
-        //        // Manejar el error apropiadamente
-        //        null
-        //    }
+    }
+
+    private fun validarFactura(): Boolean {
+        if (!(cliente != null &&
+            isFecha && isFecha2 &&
+            productos.size > 0 &&
+            binding.campoNumeroFactura.text.toString().isNotBlank())) {
+            Toast.makeText(requireContext(), "No pueden haber campos vacios", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        } else if (stringToDate(binding.btnFechaEmision.text.toString())
+            .after(stringToDate(binding.btnFechaVencimiento.text.toString()))) {
+            Toast.makeText(
+                requireContext(),
+                "La fecha de vencimiento no puede ser anterior a la de emision",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        } else
+            return true
     }
 
 }
