@@ -291,6 +291,8 @@ class NewFacturaFragment : Fragment() {
             Thread {
                 DataApplication.database.facturaDao().insertFactura(factura)
             }.start()
+            val fragmentManager = requireActivity().supportFragmentManager
+            fragmentManager.popBackStack()
         }
     }
 

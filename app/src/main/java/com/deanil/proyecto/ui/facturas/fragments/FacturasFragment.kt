@@ -62,6 +62,8 @@ class FacturasFragment : Fragment() {
             appbar.menu.getItem(i).setVisible(false)
         appbar.menu.getItem(0).setVisible(true)
         appbar.menu.getItem(1).setVisible(true)
+        requireActivity().findViewById<FloatingActionButton>(R.id.btnAdd)
+            .visibility = View.VISIBLE
     }
 
     private fun setupRecycler() {

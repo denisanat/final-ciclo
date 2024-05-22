@@ -3,14 +3,17 @@ package com.deanil.proyecto.ui.clientes.fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.deanil.proyecto.R
 import com.deanil.proyecto.data.db.DataApplication
 import com.deanil.proyecto.data.entities.ClienteEntity
 import com.deanil.proyecto.databinding.FragmentNewClienteBinding
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NewClienteFragment : Fragment() {
 
@@ -28,7 +31,6 @@ class NewClienteFragment : Fragment() {
         return binding.root
     }
 
-
     private fun clearItems() {
         for (i in 0..<appbar.menu.size())
             appbar.menu.getItem(i).setVisible(false)
@@ -37,23 +39,17 @@ class NewClienteFragment : Fragment() {
     private fun setupAppbar() {
         clearItems()
         appbar.menu.getItem(0).setVisible(true)
-        appbar.menu.getItem(3).setVisible(true)
-
-        appbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.action_agree -> {
-                    crearCliente()
-                    true
-                }
-
-                R.id.action_back -> {
-                    requireActivity().supportFragmentManager.popBackStack()
-                    true
-                }
-
-                else -> false
+        appbar.menu.getItem(1).setVisible(true)
+        appbar.menu.add("add").apply {
+            icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_check_24dp)
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            setOnMenuItemClickListener {
+                crearCliente()
+                true
             }
         }
+        requireActivity().findViewById<FloatingActionButton>(R.id.btnAdd)
+            .visibility = View.GONE
     }
 
     private fun validarForm(): Boolean {
@@ -78,10 +74,7 @@ class NewClienteFragment : Fragment() {
                 DataApplication.database.clienteDao().insertCliente(cliente)
             }.start()
             val fragmentManager = requireActivity().supportFragmentManager
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, ClientesFragment())
-                .addToBackStack(null)
-                .commit()
+            fragmentManager.popBackStack()
         }
     }
 }

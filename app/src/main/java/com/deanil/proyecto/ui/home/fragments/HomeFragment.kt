@@ -8,15 +8,19 @@ import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.deanil.proyecto.R
 import com.deanil.proyecto.databinding.FragmentHomeBinding
+import com.deanil.proyecto.ui.albaranes.fragments.AlbaranesFragment
 import com.deanil.proyecto.ui.clientes.fragments.ClientesFragment
 import com.deanil.proyecto.ui.facturas.fragments.FacturasFragment
 import com.deanil.proyecto.ui.home.activities.MainActivity
 import com.deanil.proyecto.ui.productos.fragments.ProductosFragment
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+
+    private lateinit var appbar: BottomAppBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,8 +28,9 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        appbar = requireActivity().findViewById(R.id.appbar)
 
-        setVisibilityAppBarButtons()
+        setupAppbar()
 
         val fragmentManager = requireActivity().supportFragmentManager
         binding.btnClientes.apply {
@@ -61,17 +66,22 @@ class HomeFragment : Fragment() {
         binding.btnAlbaranes.apply {
             setButtonIcon(R.drawable.albaran)
             setButtonText("Albaranes")
+            setOnClickListener {
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, AlbaranesFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
 
         return binding.root
     }
 
-    override fun onStop() {
-        super.onStop()
-        requireActivity().findViewById<CoordinatorLayout>(R.id.app_bar).visibility = View.VISIBLE
-    }
-
-    fun setVisibilityAppBarButtons() {
-        requireActivity().findViewById<CoordinatorLayout>(R.id.app_bar).visibility = View.GONE
+    private fun setupAppbar() {
+        for (i in 0..<appbar.menu.size())
+            appbar.menu.getItem(i).setVisible(false)
+        appbar.menu.getItem(3).setVisible(true)
+        requireActivity().findViewById<FloatingActionButton>(R.id.btnAdd)
+            .visibility = View.GONE
     }
 }

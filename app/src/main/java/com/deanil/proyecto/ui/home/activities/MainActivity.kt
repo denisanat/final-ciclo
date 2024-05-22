@@ -50,6 +50,9 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(binding.fragmentContainer.id, HomeFragment())
                         .commit()
+                    for (i in 0 ..  supportFragmentManager.backStackEntryCount) {
+                        supportFragmentManager.popBackStack()
+                    }
                     true
                 }
 
