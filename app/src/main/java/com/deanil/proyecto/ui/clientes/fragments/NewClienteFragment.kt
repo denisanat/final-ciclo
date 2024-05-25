@@ -57,7 +57,9 @@ class NewClienteFragment : Fragment() {
                 !binding.tNif.text.isNullOrBlank() &&
                 !binding.tDomicilio.text.isNullOrBlank() &&
                 !binding.tCorreo.text.isNullOrBlank() &&
-                !binding.tTelefono.text.isNullOrBlank()
+                !binding.tTelefono.text.isNullOrBlank() &&
+                !binding.tCiudad.text.isNullOrBlank() &&
+                !binding.tProvincia.text.isNullOrBlank()
     }
 
     private fun crearCliente() {
@@ -68,6 +70,8 @@ class NewClienteFragment : Fragment() {
                 nombre = binding.tNombre.text.toString(),
                 nif = binding.tNif.text.toString(),
                 domicilio = binding.tDomicilio.text.toString(),
+                ciudad = binding.tCiudad.text.toString(),
+                provincia = binding.tProvincia.text.toString(),
                 email = binding.tCorreo.text.toString(),
                 telefono = binding.tTelefono.text.toString() )
             Thread {

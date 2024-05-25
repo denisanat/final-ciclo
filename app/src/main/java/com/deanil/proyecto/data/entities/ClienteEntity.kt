@@ -17,6 +17,10 @@ data class ClienteEntity(
 
     val domicilio: String,
 
+    val ciudad: String,
+
+    val provincia: String,
+
     val telefono: String,
 
     val email: String

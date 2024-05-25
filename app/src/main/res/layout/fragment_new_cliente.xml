@@ -16,9 +16,6 @@
 
         android:hint="Nombre"
 
-        app:counterEnabled="true"
-        app:counterMaxLength="10"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -39,6 +36,9 @@
         style="?attr/textInputFilledStyle"
 
         android:hint="NIF"
+
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +72,59 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/algo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tiDomicilio">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tiCiudad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:endIconMode="clear_text"
+            style="?attr/textInputFilledStyle"
+            android:layout_weight="1"
+
+            android:hint="Ciudad"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tiNif">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tCiudad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tiProvincia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:endIconMode="clear_text"
+            style="?attr/textInputFilledStyle"
+            android:layout_weight="1"
+
+            android:hint="Provincia"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tiNif">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tProvincia"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tiCorreo"
         android:layout_width="match_parent"
@@ -84,7 +137,7 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tiDomicilio">
+        app:layout_constraintTop_toBottomOf="@id/algo">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tCorreo"
@@ -100,9 +153,7 @@
         android:layout_margin="20dp"
         app:endIconMode="clear_text"
         style="?attr/textInputFilledStyle"
-
         android:hint="Telefono"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tiCorreo">
@@ -110,8 +161,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tTelefono"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:digits="0123456789" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
