@@ -2,6 +2,7 @@ package com.deanil.proyecto.ui.facturas.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -29,6 +30,7 @@ import com.deanil.proyecto.R
 import com.deanil.proyecto.data.adapters.LineasAdapter
 import com.deanil.proyecto.data.db.DataApplication
 import com.deanil.proyecto.data.entities.ClienteEntity
+import com.deanil.proyecto.data.entities.DatosEmpresa
 import com.deanil.proyecto.data.entities.FacturaEntity
 import com.deanil.proyecto.data.entities.Linea
 import com.deanil.proyecto.data.entities.ProductoEntity
@@ -392,6 +394,7 @@ class NewFacturaFragment : Fragment() {
         val ancho = 595
         val alto = 842
 
+        val empresa = getEmpresa()
         val pdfDocument = PdfDocument()
         val page = pdfDocument.startPage(PdfDocument.PageInfo.Builder(ancho, alto, 1).create())
 
@@ -418,6 +421,12 @@ class NewFacturaFragment : Fragment() {
         canvas.drawText(cliente!!.domicilio, 226f, 215f, paint)
         canvas.drawText("${cliente!!.ciudad}, ${cliente!!.provincia}", 226f, 245f, paint)
         canvas.drawText(formatTelefono(cliente!!.telefono), 226f, 275f, paint)
+
+        canvas.drawText(empresa.nombre, 400f, 155f, paint)
+        canvas.drawText(empresa.nif, 400f, 185f, paint)
+        canvas.drawText(empresa.domicilio, 400f, 215f, paint)
+        canvas.drawText("${empresa.ciudad}, ${cliente!!.provincia}", 400f, 245f, paint)
+        canvas.drawText(formatTelefono(empresa.telefono), 400f, 275f, paint)
 
         paint.textSize = 17f
         y = 342f
@@ -451,6 +460,19 @@ class NewFacturaFragment : Fragment() {
         }
 
         pdfDocument.close()
+    }
+
+    private fun getEmpresa(): DatosEmpresa {
+        val sharedPreferences = requireActivity().getSharedPreferences("Empresa", Context.MODE_PRIVATE)
+        return DatosEmpresa(
+            nombre = sharedPreferences.getString("nombre", "").toString(),
+            nif = sharedPreferences.getString("nif", "").toString(),
+            domicilio = sharedPreferences.getString("domicilio", "").toString(),
+            ciudad = sharedPreferences.getString("ciudad", "").toString(),
+            provincia = sharedPreferences.getString("provincia", "").toString(),
+            email = sharedPreferences.getString("correo", "").toString(),
+            telefono = sharedPreferences.getString("telefono", "").toString()
+        )
     }
 
     private fun formatTelefono(telefono: String): String {

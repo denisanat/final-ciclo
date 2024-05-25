@@ -1,15 +1,11 @@
 package com.deanil.proyecto.ui.home.activities
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.deanil.proyecto.R
 import com.deanil.proyecto.data.db.AppDatabase
 import com.deanil.proyecto.databinding.ActivityMainBinding
-import com.deanil.proyecto.ui.clientes.fragments.ClientesFragment
 import com.deanil.proyecto.ui.home.fragments.HomeFragment
 import com.google.android.material.bottomappbar.BottomAppBar
 
