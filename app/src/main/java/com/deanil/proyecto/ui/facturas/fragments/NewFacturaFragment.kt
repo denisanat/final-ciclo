@@ -11,6 +11,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -19,7 +20,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -45,7 +49,12 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.time.Instant
+import java.time.ZoneId
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.LinkedBlockingQueue
 
 class NewFacturaFragment : Fragment() {
@@ -74,6 +83,8 @@ class NewFacturaFragment : Fragment() {
     private var isFecha = false
     private var isFecha2 = false
 
+    private var metodoDePago = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -86,10 +97,48 @@ class NewFacturaFragment : Fragment() {
         initSpinners()
         initDatePicker()
         initLineasRecycler()
+        setupSpinner()
 
         initDialogo()
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val calendario = Calendar.getInstance()
+            binding.campoNumeroFactura.setText("A${dosNumeros(calendario.get(Calendar.DAY_OF_MONTH))}${dosNumeros(calendario.get(Calendar.MONTH) + 1)}${calendario.get(Calendar.YEAR)}")
+            binding.btnFechaEmision.setText("${dosNumeros(calendario.get(Calendar.DAY_OF_MONTH))}/${dosNumeros(calendario.get(Calendar.MONTH) + 1)}/${calendario.get(Calendar.YEAR)}")
+            calendario.add(Calendar.DAY_OF_MONTH, 7)
+            binding.btnFechaVencimiento.setText("${dosNumeros(calendario.get(Calendar.DAY_OF_MONTH))}/${dosNumeros(calendario.get(Calendar.MONTH) + 1)}/${calendario.get(Calendar.YEAR)}")
+        }
+
         return binding.root
+    }
+
+    fun dosNumeros(number: Int): String {
+        return String.format("%02d", number)
+    }
+
+    private fun setupSpinner() {
+        val metodos = listOf(
+            FacturaEntity.MetodosDePago.EFECTIVO.texto,
+            FacturaEntity.MetodosDePago.PAGARE.texto,
+            FacturaEntity.MetodosDePago.CONFIRMING.texto,
+            FacturaEntity.MetodosDePago.TARJETA_BANCARIA.texto,
+            FacturaEntity.MetodosDePago.DOMICILIACION_BANCARIA.texto,
+            FacturaEntity.MetodosDePago.TRANSFERENCIA_BANCARIA.texto
+        )
+        val adapterMetodos = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, metodos)
+        adapterMetodos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.listaMetodos.adapter = adapterMetodos
+
+        binding.listaMetodos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedOption = parent.getItemAtPosition(position).toString()
+                metodoDePago = selectedOption
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                metodoDePago = FacturaEntity.MetodosDePago.EFECTIVO.texto
+            }
+        }
     }
 
     private fun initDialogo() {
@@ -124,6 +173,7 @@ class NewFacturaFragment : Fragment() {
                 numeroFactura = 0,
                 descuentoAplicado = descuento
             )
+            this.view?.clearFocus()
             lineas.add(linea)
             lineasAdapter.updateList(lineas)
             productosSeleccionados.add(producto!!)
@@ -305,7 +355,7 @@ class NewFacturaFragment : Fragment() {
                 fechaEmision = stringToDate(binding.btnFechaEmision.text.toString()),
                 fechaVencimiento = stringToDate(binding.btnFechaVencimiento.text.toString()),
                 idCliente = cliente!!.idCliente,
-                metodoDePago = FacturaEntity.MetodosDePago.EFECTIVO,
+                metodoDePago = metodoDePago,
                 importeTotal = importeTotal,
                 importeTotalIva = importeIva,
                 importeTotalPagar = importeTotalPagar
@@ -336,7 +386,8 @@ class NewFacturaFragment : Fragment() {
         if (!(cliente != null &&
             isFecha && isFecha2 &&
             productos.size > 0 &&
-            binding.campoNumeroFactura.text.toString().isNotBlank())) {
+            binding.campoNumeroFactura.text.toString().isNotBlank() &&
+                    metodoDePago.isNotBlank())) {
             Toast.makeText(requireContext(), "No pueden haber campos vacios", Toast.LENGTH_SHORT)
                 .show()
             return false
@@ -404,7 +455,6 @@ class NewFacturaFragment : Fragment() {
         canvas.drawBitmap(fondo, 0f, 0f, null)
 
         val paint = Paint()
-        var y: Float
         var x = 35f
         paint.textSize = 20f
 
@@ -413,23 +463,23 @@ class NewFacturaFragment : Fragment() {
 
         paint.color = android.graphics.Color.BLACK
         canvas.drawText(binding.btnFechaEmision.text.toString(), x, 155f, paint)
-        canvas.drawText(factura.metodoDePago.texto, x, 230f, paint)
+        canvas.drawText(factura.metodoDePago, x, 230f, paint)
 
         paint.textSize = 17f
         canvas.drawText(cliente!!.nombre, 226f, 155f, paint)
-        canvas.drawText(cliente!!.nif, 226f, 185f, paint)
+        canvas.drawText(cliente!!.nif.uppercase(), 226f, 185f, paint)
         canvas.drawText(cliente!!.domicilio, 226f, 215f, paint)
         canvas.drawText("${cliente!!.ciudad}, ${cliente!!.provincia}", 226f, 245f, paint)
         canvas.drawText(formatTelefono(cliente!!.telefono), 226f, 275f, paint)
 
-        canvas.drawText(empresa.nombre, 400f, 155f, paint)
-        canvas.drawText(empresa.nif, 400f, 185f, paint)
-        canvas.drawText(empresa.domicilio, 400f, 215f, paint)
-        canvas.drawText("${empresa.ciudad}, ${cliente!!.provincia}", 400f, 245f, paint)
-        canvas.drawText(formatTelefono(empresa.telefono), 400f, 275f, paint)
+        canvas.drawText(empresa.nombre, 420f, 155f, paint)
+        canvas.drawText(empresa.nif.uppercase(), 420f, 185f, paint)
+        canvas.drawText(empresa.domicilio, 420f, 215f, paint)
+        canvas.drawText("${empresa.ciudad}, ${cliente!!.provincia}", 420f, 245f, paint)
+        canvas.drawText(formatTelefono(empresa.telefono), 420f, 275f, paint)
 
         paint.textSize = 17f
-        y = 342f
+        var y = 342f
         for (i in 0..< lineas.size) {
             canvas.drawText(getNumberString(lineas[i].cantidadProducto), 50f, y, paint)
             canvas.drawText(productosSeleccionados[i].nombre, 120f, y, paint)

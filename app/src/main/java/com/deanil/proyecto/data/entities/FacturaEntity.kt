@@ -22,7 +22,7 @@ data class FacturaEntity(
     val fechaVencimiento: Date,
 
     @ColumnInfo(name = "metodo_de_pago")
-    val metodoDePago: MetodosDePago,
+    val metodoDePago: String,
 
     @ColumnInfo(name = "importe_total")
     val importeTotal: Float,
