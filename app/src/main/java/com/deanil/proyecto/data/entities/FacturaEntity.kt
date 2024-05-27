@@ -13,13 +13,13 @@ data class FacturaEntity(
     @ColumnInfo(name = "numero_factura")
     val numeroFactura: String,
 
-    val estado: Estados,
+    val estado: String,
 
     @ColumnInfo(name = "fecha_emision")
-    val fechaEmision: Date,
+    val fechaEmision: String,
 
     @ColumnInfo(name = "fecha_vencimiento")
-    val fechaVencimiento: Date,
+    val fechaVencimiento: String,
 
     @ColumnInfo(name = "metodo_de_pago")
     val metodoDePago: String,

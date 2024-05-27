@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.deanil.proyecto.data.entities.AlbaranEntity
 
 @Dao
@@ -19,7 +20,7 @@ interface AlbaranDao {
     @Insert
     fun insertAllAlbaranes(albaranes: List<AlbaranEntity>)
 
-    @Insert
+    @Upsert
     fun insertAlbaran(albaran: AlbaranEntity)
 
     @Update

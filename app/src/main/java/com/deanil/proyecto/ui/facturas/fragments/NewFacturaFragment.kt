@@ -2,6 +2,7 @@ package com.deanil.proyecto.ui.facturas.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -79,9 +80,6 @@ class NewFacturaFragment : Fragment() {
     private var importeTotal = 0f
     private var importeIva = 0f
     private var importeTotalPagar = 0f
-
-    private var isFecha = false
-    private var isFecha2 = false
 
     private var metodoDePago = ""
 
@@ -320,7 +318,6 @@ class NewFacturaFragment : Fragment() {
 
     fun onDateSelected(day: Int, month: Int, year: Int) {
         binding.btnFechaEmision.setText("$day/${month+1}/$year")
-        isFecha = true
     }
 
     private fun showDatePickerDialog2() {
@@ -330,7 +327,6 @@ class NewFacturaFragment : Fragment() {
 
     fun onDateSelected2(day: Int, month: Int, year: Int) {
         binding.btnFechaVencimiento.setText("$day/${month+1}/$year")
-        isFecha2 = true
     }
 
     private fun setupAppbar() {
@@ -351,20 +347,19 @@ class NewFacturaFragment : Fragment() {
         if (validarFactura()) {
             factura = FacturaEntity(
                 numeroFactura = binding.campoNumeroFactura.text.toString(),
-                estado = FacturaEntity.Estados.NOPAGADA,
-                fechaEmision = stringToDate(binding.btnFechaEmision.text.toString()),
-                fechaVencimiento = stringToDate(binding.btnFechaVencimiento.text.toString()),
+                estado = FacturaEntity.Estados.NOPAGADA.texto,
+                fechaEmision = binding.btnFechaEmision.text.toString(),
+                fechaVencimiento = binding.btnFechaVencimiento.text.toString(),
                 idCliente = cliente!!.idCliente,
                 metodoDePago = metodoDePago,
                 importeTotal = importeTotal,
                 importeTotalIva = importeIva,
                 importeTotalPagar = importeTotalPagar
             )
-            /*
             Thread {
                 DataApplication.database.facturaDao().insertFactura(factura)
+                DataApplication.database.lineaDao().insertLineas(lineas)
             }.start()
-             */
             val fragmentManager = requireActivity().supportFragmentManager
             fragmentManager.popBackStack()
 
@@ -384,7 +379,6 @@ class NewFacturaFragment : Fragment() {
 
     private fun validarFactura(): Boolean {
         if (!(cliente != null &&
-            isFecha && isFecha2 &&
             productos.size > 0 &&
             binding.campoNumeroFactura.text.toString().isNotBlank() &&
                     metodoDePago.isNotBlank())) {
@@ -455,7 +449,7 @@ class NewFacturaFragment : Fragment() {
         canvas.drawBitmap(fondo, 0f, 0f, null)
 
         val paint = Paint()
-        var x = 35f
+        val x = 35f
         paint.textSize = 20f
 
         paint.color = android.graphics.Color.GRAY
@@ -475,7 +469,7 @@ class NewFacturaFragment : Fragment() {
         canvas.drawText(empresa.nombre, 420f, 155f, paint)
         canvas.drawText(empresa.nif.uppercase(), 420f, 185f, paint)
         canvas.drawText(empresa.domicilio, 420f, 215f, paint)
-        canvas.drawText("${empresa.ciudad}, ${cliente!!.provincia}", 420f, 245f, paint)
+        canvas.drawText("${empresa.ciudad}, ${empresa.provincia}", 420f, 245f, paint)
         canvas.drawText(formatTelefono(empresa.telefono), 420f, 275f, paint)
 
         paint.textSize = 17f
@@ -498,7 +492,7 @@ class NewFacturaFragment : Fragment() {
         y += 26.4f
 
         pdfDocument.finishPage(page)
-        val filePath = File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "Factura.pdf")
+        val filePath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "${factura.numeroFactura}.pdf")
         try {
             pdfDocument.writeTo(FileOutputStream(filePath))
             showToast("PDF guardado en ${filePath.absolutePath}")
@@ -551,15 +545,22 @@ class NewFacturaFragment : Fragment() {
     }
 
     private fun openPdf(file: File) {
-        val uri: Uri = FileProvider.getUriForFile(requireContext(), "${requireActivity().applicationContext.packageName}.fileprovider", file)
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(uri, "application/pdf")
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-        try {
-            startActivity(intent)
-        } catch (e: Exception) {
-            showToast("No se puede abrir el PDF: ${e.message}")
+        val filePath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file.name)
+        if (filePath.exists()) {
+            val uri = FileProvider.getUriForFile(requireContext(), "${requireActivity().applicationContext.packageName}.provider", filePath)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(uri, "application/pdf")
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+
+            val chooser = Intent.createChooser(intent, "Abrir con")
+            try {
+                startActivity(chooser)
+            } catch (e: ActivityNotFoundException) {
+                showToast("No hay aplicaciones disponibles para abrir PDF")
+            }
+        } else {
+            showToast("El archivo no existe")
         }
     }
 

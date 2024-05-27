@@ -6,7 +6,9 @@ import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.deanil.proyecto.R
 import com.deanil.proyecto.data.adapters.FacturasAdapter
@@ -19,7 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.concurrent.LinkedBlockingQueue
 
 
-class FacturasFragment : Fragment() {
+class FacturasFragment : Fragment(), com.deanil.proyecto.data.interfaces.OnClickListener {
 
     private lateinit var binding: FragmentFacturasBinding
     private lateinit var appbar: BottomAppBar
@@ -33,7 +35,7 @@ class FacturasFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFacturasBinding.inflate(inflater, container, false)
-        facturasAdapter = FacturasAdapter(facturas)
+        facturasAdapter = FacturasAdapter(facturas, this)
         appbar = requireActivity().findViewById(R.id.appbar)
 
         getFacturas()
@@ -100,4 +102,11 @@ class FacturasFragment : Fragment() {
             }
     }
 
+    override fun onClick(factura: FacturaEntity) {
+        val fragmentManager = requireActivity().supportFragmentManager
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, FacturaDetalladaFragment(factura))
+            .addToBackStack(null)
+            .commit()
+    }
 }

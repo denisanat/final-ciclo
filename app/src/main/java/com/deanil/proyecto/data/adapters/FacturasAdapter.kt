@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.deanil.proyecto.R
 import com.deanil.proyecto.data.entities.FacturaEntity
+import com.deanil.proyecto.data.interfaces.OnClickListener
 import com.deanil.proyecto.databinding.ItemFacturaBinding
 
 class FacturasAdapter (
-    private var facturas: MutableList<FacturaEntity>
+    private var facturas: MutableList<FacturaEntity>,
+    private val onClickListener: OnClickListener
 ) : RecyclerView.Adapter<FacturasAdapter.ViewHolder>() {
 
     private lateinit var context: Context
@@ -24,6 +26,7 @@ class FacturasAdapter (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val factura = facturas.get(position)
         with(holder) {
+            setClickListener(factura)
             binding.tNumeroFactura.text = factura.numeroFactura
         }
     }
@@ -32,6 +35,10 @@ class FacturasAdapter (
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val binding = ItemFacturaBinding.bind(view)
+
+        fun setClickListener(factura: FacturaEntity) {
+            binding.root.setOnClickListener { onClickListener.onClick(factura) }
+        }
     }
 
     fun updateList(facturas: MutableList<FacturaEntity>) {

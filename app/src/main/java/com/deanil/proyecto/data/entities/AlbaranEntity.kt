@@ -7,13 +7,13 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "albaranes")
 data class AlbaranEntity(
 
-    @PrimaryKey
+    @PrimaryKey()
     @ColumnInfo(name = "numero_albaran")
     val numeroAlbaran: String,
 
     @ColumnInfo(name = "fecha_emision")
-    val fechaEmision: Long,
+    val fechaEmision: String,
 
     @ColumnInfo(name = "numero_factura")
-    val numeroFactura: Int
+    val numeroFactura: String
 )

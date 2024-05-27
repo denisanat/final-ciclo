@@ -4,10 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = "lineas",
-    primaryKeys = ["codigo_producto", "numero_factura"]
-)
+@Entity(tableName = "lineas")
 data class Linea(
 
     @PrimaryKey(autoGenerate = true)
