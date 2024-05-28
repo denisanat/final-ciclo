@@ -35,4 +35,7 @@ interface FacturaDao {
 
     @Query("UPDATE facturas SET estado = 'Pagada' WHERE numero_factura = :numero")
     fun pagarFactura(numero: String)
+
+    @Query("SELECT * FROM facturas WHERE estado = :estado")
+    fun getFacturasByEstado(estado: String): MutableList<FacturaEntity>
 }

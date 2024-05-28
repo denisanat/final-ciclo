@@ -7,6 +7,7 @@ import com.deanil.proyecto.R
 import com.deanil.proyecto.data.db.AppDatabase
 import com.deanil.proyecto.databinding.ActivityMainBinding
 import com.deanil.proyecto.ui.home.fragments.HomeFragment
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomappbar.BottomAppBar
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "AppDatabase")
             .fallbackToDestructiveMigration()
             .build()
+
+        MobileAds.initialize(this)
 
         appbarFunction()
 

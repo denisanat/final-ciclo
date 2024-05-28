@@ -15,6 +15,7 @@ import com.deanil.proyecto.ui.clientes.fragments.ClientesFragment
 import com.deanil.proyecto.ui.facturas.fragments.FacturasFragment
 import com.deanil.proyecto.ui.home.activities.MainActivity
 import com.deanil.proyecto.ui.productos.fragments.ProductosFragment
+import com.google.android.gms.ads.AdRequest
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
         appbar = requireActivity().findViewById(R.id.appbar)
 
         setupAppbar()
+        initLoadAds()
 
         val fragmentManager = requireActivity().supportFragmentManager
 
@@ -107,6 +109,11 @@ class HomeFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun initLoadAds() {
+        val adRequest = AdRequest.Builder().build()
+        binding.banner.loadAd(adRequest)
     }
 
     private fun noEmpresa() {

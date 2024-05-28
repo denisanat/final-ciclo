@@ -9,6 +9,7 @@ import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.deanil.proyecto.R
 import com.deanil.proyecto.data.adapters.FacturasAdapter
@@ -29,6 +30,8 @@ class FacturasFragment : Fragment(), com.deanil.proyecto.data.interfaces.OnClick
     private lateinit var facturasAdapter: FacturasAdapter
 
     private var facturas = mutableListOf<FacturaEntity>()
+
+    var opcion = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +54,7 @@ class FacturasFragment : Fragment(), com.deanil.proyecto.data.interfaces.OnClick
             queue.add(facturas)
         }.start()
         facturas = queue.take()
+        facturasAdapter.updateList(facturas)
     }
 
     private fun setup() {
@@ -74,7 +78,7 @@ class FacturasFragment : Fragment(), com.deanil.proyecto.data.interfaces.OnClick
             adapter = facturasAdapter
         }
 
-        facturasAdapter.updateList(facturas)
+        getFacturas()
     }
 
     private fun setupBtn() {
@@ -100,6 +104,13 @@ class FacturasFragment : Fragment(), com.deanil.proyecto.data.interfaces.OnClick
                     .addToBackStack(null)
                     .commit()
             }
+
+        binding.btnFilter.setOnClickListener {
+            binding.search.text.clear()
+
+            getOpcion()
+            filtrar()
+        }
     }
 
     override fun onClick(factura: FacturaEntity) {
@@ -108,5 +119,58 @@ class FacturasFragment : Fragment(), com.deanil.proyecto.data.interfaces.OnClick
             .replace(R.id.fragmentContainer, FacturaDetalladaFragment(factura))
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun getOpcion() {
+        if (++opcion > 3)
+            opcion = 0
+    }
+
+    private fun filtrar() {
+        when (opcion) {
+            1 -> {
+                binding.btnFilter.apply {
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    text = FacturaEntity.Estados.NOPAGADA.texto
+                }
+                getFacturas(FacturaEntity.Estados.NOPAGADA.texto)
+            }
+            2 -> {
+                binding.btnFilter.apply {
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    text = FacturaEntity.Estados.PAGADA.texto
+                }
+                getFacturas(FacturaEntity.Estados.PAGADA.texto)
+            }
+            3 -> {
+                binding.btnFilter.apply {
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    text = FacturaEntity.Estados.VENCIDA.texto
+                }
+                getFacturas(FacturaEntity.Estados.VENCIDA.texto)
+            }
+            else -> {
+                binding.btnFilter.apply {
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                    opcion = 0
+                    text = "Filtrar"
+                }
+                getFacturas()
+            }
+        }
+    }
+
+    private fun getFacturas(estado: String) {
+        val queue = LinkedBlockingQueue<MutableList<FacturaEntity>>()
+        Thread {
+            val facturas = DataApplication.database.facturaDao().getFacturasByEstado(estado)
+            queue.add(facturas)
+        }.start()
+        facturas = queue.take()
+        facturasAdapter.updateList(facturas)
     }
 }
