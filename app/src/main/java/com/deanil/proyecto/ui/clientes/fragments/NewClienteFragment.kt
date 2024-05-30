@@ -17,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NewClienteFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewClienteBinding
+    lateinit var binding: FragmentNewClienteBinding
     private lateinit var appbar: BottomAppBar
 
     override fun onCreateView(
@@ -52,7 +52,7 @@ class NewClienteFragment : Fragment() {
             .visibility = View.GONE
     }
 
-    private fun validarForm(): Boolean {
+    fun validarForm(): Boolean {
         return !binding.tNombre.text.isNullOrBlank() &&
                 !binding.tNif.text.isNullOrBlank() &&
                 !binding.tDomicilio.text.isNullOrBlank() &&
@@ -62,7 +62,7 @@ class NewClienteFragment : Fragment() {
                 !binding.tProvincia.text.isNullOrBlank()
     }
 
-    private fun crearCliente() {
+    fun crearCliente() {
         if (!validarForm()) {
             Toast.makeText(context, "Los datos no son correctos", Toast.LENGTH_SHORT).show()
         } else {

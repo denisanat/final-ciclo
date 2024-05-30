@@ -25,4 +25,60 @@
         android:layout_marginTop="20dp"
         android:text="Abrir factura"/>
 
+    <TextView
+        android:id="@+id/facturaFechaEmision"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pdfFactura"/>
+
+    <TextView
+        android:id="@+id/facturaNombreCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="214dp"
+        app:layout_constraintTop_toBottomOf="@id/facturaFechaEmision"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/facturaNombreEmpresa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="134dp"
+        tools:layout_editor_absoluteY="204dp"
+        app:layout_constraintStart_toEndOf="@id/facturaNombreCliente"
+        app:layout_constraintTop_toTopOf="@id/facturaNombreCliente"
+        android:layout_marginStart="40dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listaProductos"
+        android:layout_width="369dp"
+        android:layout_height="437dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="253dp"
+        app:layout_constraintTop_toBottomOf="@id/facturaNombreEmpresa"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/facturaMetodo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="245dp"
+        tools:layout_editor_absoluteY="210dp"
+        app:layout_constraintStart_toEndOf="@id/facturaNombreEmpresa"
+        app:layout_constraintTop_toTopOf="@id/facturaNombreEmpresa"
+        android:layout_marginStart="40dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

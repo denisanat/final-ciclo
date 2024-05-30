@@ -15,23 +15,14 @@ interface FacturaDao {
     @Query("SELECT * FROM facturas")
     fun getAllFacturas(): MutableList<FacturaEntity>
 
-    @Query("SELECT * FROM facturas WHERE numero_factura = :numero")
-    fun getFactura(numero: String): FacturaEntity
-
-    @Insert
-    fun insertAll(facturas: List<FacturaEntity>)
-
     @Insert
     fun insertFactura(factura: FacturaEntity)
 
-    @Update
-    fun updateFactura(factura: FacturaEntity)
+    @Query("SELECT * FROM facturas WHERE cliente_id = :cliente")
+    fun getFacturasByCliente(cliente: Int): List<FacturaEntity>
 
     @Delete
     fun deleteFactura(factura: FacturaEntity)
-
-    @Query("SELECT * FROM facturas WHERE cliente_id = :cliente")
-    fun getFacturasByCliente(cliente: Int): List<FacturaEntity>
 
     @Query("UPDATE facturas SET estado = 'Pagada' WHERE numero_factura = :numero")
     fun pagarFactura(numero: String)

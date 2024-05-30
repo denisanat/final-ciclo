@@ -27,7 +27,8 @@
             app:layout_constraintStart_toEndOf="@id/nombreProducto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/nombreProducto"/>
+            app:layout_constraintBottom_toBottomOf="@id/nombreProducto"
+            android:gravity="center"/>
 
         <EditText
             android:id="@+id/cantidadProducto"
@@ -56,7 +57,8 @@
             app:layout_constraintStart_toStartOf="@id/guide2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/nombreProducto"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/descuentoProducto"
+            android:gravity="center"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"/>
 

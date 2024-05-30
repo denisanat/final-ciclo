@@ -19,7 +19,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.deanil.proyecto.R
+import com.deanil.proyecto.data.adapters.LineasAdapter
 import com.deanil.proyecto.data.db.AppDatabase
 import com.deanil.proyecto.data.db.DataApplication
 import com.deanil.proyecto.data.entities.AlbaranEntity
@@ -56,8 +58,27 @@ class FacturaDetalladaFragment(
             val filePath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "${factura.numeroFactura}.pdf")
             abrirPdf(filePath)
         }
+        binding.facturaNombreCliente.text = getCliente().nombre
+        binding.facturaNombreEmpresa.text = getEmpresa().nombre
+        binding.facturaFechaEmision.text = factura.fechaEmision
+        binding.facturaMetodo.text = factura.metodoDePago
+
+        setupLista()
 
         return binding.root
+    }
+
+    private fun setupLista() {
+        val lineas = getLineas()
+        val productos = getProductos(lineas)
+        val lineasAdapter = LineasAdapter(lineas)
+
+        val recycler = binding.listaProductos
+
+        recycler.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = lineasAdapter
+        }
     }
 
     private fun abrirPdf(file: File) {
@@ -105,6 +126,17 @@ class FacturaDetalladaFragment(
                     )
                 }.start()
                 crearPdf()
+                true
+            }
+        }
+        appbar.menu.add("eliminar").apply {
+            icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_cancel_24dp)
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            setOnMenuItemClickListener {
+                Thread {
+                    DataApplication.database.facturaDao().deleteFactura(factura)
+                }.start()
+                requireActivity().supportFragmentManager.popBackStack()
                 true
             }
         }

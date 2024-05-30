@@ -41,6 +41,9 @@ android {
 
 dependencies {
 
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.fragment.testing)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     //Room
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
@@ -52,14 +55,20 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
 
+    //tests
+    val mockito_version = "3.11.2"
+    testImplementation("org.mockito:mockito-core:$mockito_version")
+    testImplementation("org.mockito:mockito-inline:$mockito_version")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.google.android.gms:play-services-ads:23.1.0")
 }

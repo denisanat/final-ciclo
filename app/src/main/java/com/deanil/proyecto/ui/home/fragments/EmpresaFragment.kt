@@ -15,7 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class EmpresaFragment : Fragment() {
 
-    private lateinit var binding: FragmentEmpresaBinding
+    lateinit var binding: FragmentEmpresaBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +46,7 @@ class EmpresaFragment : Fragment() {
         }
     }
 
-    private fun aceptar() {
+    fun aceptar() {
         val sharedPreferences = requireActivity().getSharedPreferences("Empresa", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 

@@ -203,8 +203,8 @@ class NewFacturaFragment : Fragment() {
             setOnItemClickListener { parent, view, position, id ->
                 val selectedProducto: String = parent.getItemAtPosition(position) as String
                 producto = getProducto(selectedProducto)
-                bindingDialogoNuevaLineaBinding.ivaProducto.text = producto?.iva.toString()
-                bindingDialogoNuevaLineaBinding.precioProducto.text = producto?.precioUnitario.toString()
+                bindingDialogoNuevaLineaBinding.ivaProducto.text = producto?.iva.toString() + "%"
+                bindingDialogoNuevaLineaBinding.precioProducto.text = producto?.precioUnitario.toString() + " €"
             }
         }
     }
@@ -456,6 +456,7 @@ class NewFacturaFragment : Fragment() {
         canvas.drawText("#${binding.campoNumeroFactura.text.toString()}", x, 80f, paint)
 
         paint.color = android.graphics.Color.BLACK
+        canvas.drawText("1", 570f, 20f, paint)
         canvas.drawText(binding.btnFechaEmision.text.toString(), x, 155f, paint)
         canvas.drawText(factura.metodoDePago, x, 230f, paint)
 
